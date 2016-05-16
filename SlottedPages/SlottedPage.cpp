@@ -21,7 +21,7 @@ uint64_t SlottedPage::getPageId() {
 //Removing all the Spaces from a Page
 void SlottedPage::arrangePage() {
     BufferFrame bf = bm.fixPage(pageId, false); //vll. true?
-    void* data = bf.getData();
+    char* data = (char*)bf.getData();
     
     int moveBack = 0;
     for( int i = 0; i < freeSpaces.size(); i++ ) {
@@ -35,7 +35,7 @@ void SlottedPage::arrangePage() {
     
 unsigned SlottedPage::insert( const Record& rec ) {
     BufferFrame bf = bm.fixPage(pageId, false);//vll true?
-    void* data = bf.getData();
+    char* data = (char*)bf.getData();
     
     Header* hdr = (Header*)data;
     
@@ -72,7 +72,7 @@ unsigned SlottedPage::insert( const Record& rec ) {
 //Needs to be improved
 bool SlottedPage::remove(TID tid) {
     BufferFrame bf = bm.fixPage(tid.pageId, false); //vll. true?
-    void* data = bf.getData();
+    char* data = (char*)bf.getData();
     
     Slot* s = (Slot*)(data + sizeof(Header)) + tid.slotId;
     freeSpaces.push_back(*s);//Save free part so rearrange page later on
@@ -85,7 +85,7 @@ bool SlottedPage::remove(TID tid) {
 
 Record SlottedPage::lookup( TID tid ) {
     BufferFrame bf = bm.fixPage(tid.pageId, false);
-    void* data = bf.getData();
+    char* data = (char*)bf.getData();
     
     Slot* s = (Slot*)(data + sizeof(Header)) + tid.slotId;
     

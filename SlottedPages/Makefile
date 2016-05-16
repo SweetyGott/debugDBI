@@ -1,33 +1,20 @@
 
-SlottedPage: slottedTest.o BufferManager.o BufferFrame.o SlottedPage.o SPSegment.o Tid.o Record.o
-	g++ -o SlottedPage slottedTest.o BufferManager.o BufferFrame.o SlottedPage.o SPSegment.o Tid.o Record.o
+CXXFLAGS+= -std=c++11 -Wall
 
-slottedTest.o: slottedTest.cpp
-	g++ -c -std=c++11 slottedTest.cpp
+#SOURCES = $(wildcard *.cpp)
+SOURCES = slottedTest.cpp BufferManager.cpp BufferFrame.cpp SlottedPage.cpp SPSegment.cpp Tid.cpp Record.cpp
+HEADERS = $(wildcard *.hpp)
+OBJECTS = $(SOURCES:.cpp=.o)
 
-BufferManager.o: BufferManager.cpp BufferFrame.hpp
-	g++ -c -std=c++11 BufferManager.cpp
 
-BufferFrame.o: BufferFrame.cpp
-	g++ -c -std=c++11 BufferFrame.cpp
-	
-SlottedPage.o: SlottedPage.hpp SlottedPage.cpp
-	g++ -c -std=c++11 SlottedPage.hpp SlottedPage.cpp
-	
-SPSegment.o: SPSegment.hpp SPSegment.cpp
-	g++ -c -std=c++11 SPSegment.hpp SPSegment.cpp
+SlottedPage: $(OBJECTS)
+	g++ -Wall $(OBJECTS) -o SlottedPage
 
-Tid.o: Tid.hpp
-	g++ -c -std=c++11 Tid.hpp
+%.o: %.cpp $(HEADERS)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
-Record.o: Record.hpp Record.cpp
-	g++ -c -std=c++11 Record.hpp Record.cpp
-	
 all:
 	SlottedPage;
 
 clean:
-	rm -f slottedTest slottedTest.o
-
-
-
+	rm -f slottedTest *.o
